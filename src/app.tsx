@@ -1,7 +1,13 @@
+import BackgroundAnim from "./components/BackgroundAnim";
+import Navbar from "./components/Navbar";
+import WelcomeSection from "./components/WelcomeSection";
+
 function App() {
   return (
     <>
-      <h1>weathernow</h1>
+      <Navbar />
+      <WelcomeSection />
+      <BackgroundAnim />
     </>
   );
 }
