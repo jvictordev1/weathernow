@@ -1,3 +1,4 @@
+import BackgroundAnim from "./components/BackgroundAnim";
 import Navbar from "./components/Navbar";
 import WelcomeSection from "./components/WelcomeSection";
 
@@ -6,8 +7,8 @@ function App() {
     <>
       <main>
         <Navbar />
+        <BackgroundAnim />
         <WelcomeSection />
-        {/* <BackgroundAnim /> */}
       </main>
     </>
   );
