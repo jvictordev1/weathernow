@@ -1,14 +1,16 @@
-import BackgroundAnim from "./components/BackgroundAnim";
+import ForecastStats from "./components/ForecastStats";
 import Navbar from "./components/Navbar";
-import WelcomeSection from "./components/WelcomeSection";
 
 function App() {
   return (
     <>
-      <main>
+      <main className="bg-radial-gradient bg-no-repeat h-screen overflow-auto">
         <Navbar />
-        <BackgroundAnim />
-        <WelcomeSection />
+        {/* <BackgroundAnim /> */}
+        <section className="px-3">
+          {/* <Landing /> */}
+          <ForecastStats />
+        </section>
       </main>
     </>
   );
