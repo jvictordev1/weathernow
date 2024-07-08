@@ -4,16 +4,16 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown";
+import { DialogTrigger } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { FaGithub, FaSun } from "react-icons/fa";
 import { IoMdSearch } from "react-icons/io";
 import { IoLocationSharp, IoMenu } from "react-icons/io5";
-import { MdGpsFixed } from "react-icons/md";
-import { TiArrowLeft } from "react-icons/ti";
+import { MdDelete, MdGpsFixed } from "react-icons/md";
 import reducedlogo from "../../assets/reducedlogo.svg";
+import { Dialog, DialogClose, DialogContent, DialogFooter } from "../ui/dialog";
 
 export default function Navbar() {
-  const [isInputVisible, setIsInputVisible] = useState(false);
   const [isCurrentLocationActive, setIsCurrentLocationActive] = useState(false);
   const cities = [
     {
@@ -38,60 +38,56 @@ export default function Navbar() {
     },
   ];
   return (
-    <>
-      <div
-        className={
-          isInputVisible
-            ? "visible absolute h-full w-full px-5 bg-zinc-900"
-            : "hidden"
-        }
-      >
-        <section className="flex items-center gap-2 py-5 border-b-2 border-zinc-800">
-          <button
-            onClick={() => setIsInputVisible(false)}
-            className="flex text-white"
-            title="Return"
-          >
-            <TiArrowLeft className="size-8" />
-          </button>
+    <Dialog>
+      <DialogContent className="h-1/2 bg-zinc-900 py-2 border-0 w-4/5 rounded-xl">
+        <section className="flex items-center border-b-2 border-zinc-800">
           <input
             type="text"
             name="city"
             id="city"
             placeholder="Search city..."
-            className="w-full text-white bg-transparent border-2 font-medium border-zinc-800 placeholder:text-zinc-700 focus:border-white  rounded-xl py-1 px-2 outline-none"
+            className="w-full text-white bg-transparent font-medium text-xl border-zinc-800 placeholder:text-zinc-700 focus:border-white rounded-xl px-2 outline-none"
           />
         </section>
-        <section className="mt-4">
+        <section className="h-full">
           <ul className="flex flex-col text-white font-medium text-md gap-4">
             {cities.map((city) => {
               return (
-                <li className="flex items-center gap-4" key={city.city}>
-                  <IoLocationSharp className="size-6 text-zinc-500" />
-                  <div className="flex flex-col">
-                    <h3>{city.city}</h3>
-                    <p className="text-zinc-500 text-sm">
-                      {city.state}, {city.country}
-                    </p>
+                <li
+                  className="flex items-center justify-between"
+                  key={city.city}
+                >
+                  <div className="flex items-center gap-3">
+                    <IoLocationSharp className="size-6 text-zinc-500" />
+                    <div className="flex flex-col">
+                      <h3>{city.city}</h3>
+                      <p className="text-zinc-500 text-sm">
+                        {city.state}, {city.country}
+                      </p>
+                    </div>
                   </div>
+                  <MdDelete className="size-5 text-red-400" />
                 </li>
               );
             })}
           </ul>
         </section>
-      </div>
+        <DialogFooter>
+          <DialogClose className="w-full">
+            <button className="w-full text-white bg-red-500 font-bold rounded-xl px-4 py-2">
+              Close
+            </button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
       <nav className="flex items-center text-white font-medium w-full justify-between py-5 px-6 border-b-2 border-zinc-900">
         {/* <img className="w-24" src={logo} alt="weathernow logo" /> */}
         <img className="w-6" src={reducedlogo} alt="weathernow logo" />
         <ul className="flex items-center gap-3">
           <li>
-            <button
-              onClick={() => setIsInputVisible(!isInputVisible)}
-              title="Search city"
-              className="flex"
-            >
+            <DialogTrigger title="Search city" className="flex">
               <IoMdSearch className="size-6" />
-            </button>
+            </DialogTrigger>
             {/* <input
           className="bg-dark-search-icon focus:bg-light-search-icon bg-[length:23px] bg-[position:5px] bg-transparent bg-no-repeat text-sm border-2 outline-none border-zinc-800 focus:border-zinc-100 rounded-lg px-8 py-1 placeholder:text-zinc-800"
           placeholder="Search city..."
@@ -158,6 +154,6 @@ export default function Navbar() {
           </li>
         </ul>
       </nav>
-    </>
+    </Dialog>
   );
 }

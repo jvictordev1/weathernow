@@ -5,6 +5,8 @@ import { IoEye, IoLocationSharp } from "react-icons/io5";
 import { LiaTemperatureLowSolid } from "react-icons/lia";
 import { MdWaves } from "react-icons/md";
 import Divisor from "../Divisor";
+import Footer from "../Footer";
+import TodayForecastInfoCard from "../TodayForecastInfoCard";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 
 export default function ForecastStats() {
@@ -191,23 +193,28 @@ export default function ForecastStats() {
       </section>
       <section className="flex flex-col w-full text-lg text-zinc-500 font-medium rounded-md px-4 py-2 gap-2">
         <h3 className="text-xl">Today at</h3>
-        <ul className="grid grid-cols-3 text-white gap-4">
-          {todayAt.map((day) => {
-            return (
-              <li className="flex flex-col gap-2">
-                <div className="flex flex-col items-center justify-center py-2 bg-zinc-900 rounded-xl">
-                  <h4 className="text-xl">{day.time}</h4>
-                  <img className="size-12" src={day.icon} />
-                  <p className="text-md font-normal">{day.temp}</p>
-                </div>
-                <div className="flex flex-col items-center justify-center py-2 bg-zinc-900 rounded-xl">
-                  <img className="size-12" src={day.orientationIcon} />
-                  <p className="text-md font-normal">{day.wind}</p>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+        <Carousel opts={{ dragFree: true }} orientation="horizontal">
+          <CarouselContent className="w-full">
+            {todayAt.map((day) => {
+              return (
+                <CarouselItem
+                  key={day.time}
+                  className="flex flex-col gap-2 basis-1/2"
+                >
+                  <TodayForecastInfoCard
+                    infoHeader={day.time}
+                    infoIcon={day.icon}
+                    infoParagraph={day.temp}
+                  />
+                  <TodayForecastInfoCard
+                    infoIcon={day.orientationIcon}
+                    infoParagraph={day.wind}
+                  />
+                </CarouselItem>
+              );
+            })}
+          </CarouselContent>
+        </Carousel>
       </section>
       <section className="flex flex-col w-full text-lg text-zinc-500 font-medium rounded-md px-4 py-2 gap-2">
         <h3 className="text-xl">Week Forecast</h3>
@@ -227,6 +234,7 @@ export default function ForecastStats() {
           </CarouselContent>
         </Carousel>
       </section>
+      <Footer />
     </>
   );
 }
