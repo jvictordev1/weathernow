@@ -5,6 +5,7 @@ import { IoEye, IoLocationSharp } from "react-icons/io5";
 import { LiaTemperatureLowSolid } from "react-icons/lia";
 import { MdWaves } from "react-icons/md";
 import Divisor from "../Divisor";
+import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 
 export default function ForecastStats() {
   const airQualityStats = [
@@ -16,8 +17,84 @@ export default function ForecastStats() {
     },
     { name: "O3", value: 38.6 },
   ];
+  const todayAt = [
+    {
+      time: "12 AM",
+      icon: "../src/assets/weather_icons/02n.png",
+      temp: "5°C",
+      wind: "5 km/h",
+      orientationIcon: "../src/assets/weather_icons/direction.png",
+    },
+    {
+      time: "6 AM",
+      icon: "../src/assets/weather_icons/02n.png",
+      temp: "7°C",
+      wind: "12 km/h",
+      orientationIcon: "../src/assets/weather_icons/direction.png",
+    },
+    {
+      time: "9 AM",
+      icon: "../src/assets/weather_icons/02n.png",
+      temp: "9°C",
+      wind: "10 km/h",
+      orientationIcon: "../src/assets/weather_icons/direction.png",
+    },
+    {
+      time: "12 PM",
+      icon: "../src/assets/weather_icons/02n.png",
+      temp: "12°C",
+      wind: "8 km/h",
+      orientationIcon: "../src/assets/weather_icons/direction.png",
+    },
+    {
+      time: "3 PM",
+      icon: "../src/assets/weather_icons/02n.png",
+      temp: "10°C",
+      wind: "10 km/h",
+      orientationIcon: "../src/assets/weather_icons/direction.png",
+    },
+    {
+      time: "7 PM",
+      icon: "../src/assets/weather_icons/02n.png",
+      temp: "6°C",
+      wind: "9 km/h",
+      orientationIcon: "../src/assets/weather_icons/direction.png",
+    },
+  ];
+  const weekForecast = [
+    {
+      icon: "../src/assets/weather_icons/01n.png",
+      temp: "5°C",
+      date: "2 Mar., Mon.",
+    },
+    {
+      icon: "../src/assets/weather_icons/02n.png",
+      temp: "7°C",
+      date: "3 Mar., Tue.",
+    },
+    {
+      icon: "../src/assets/weather_icons/09n.png",
+      temp: "9°C",
+      date: "4 Mar., Wed.",
+    },
+    {
+      icon: "../src/assets/weather_icons/09n.png",
+      temp: "12°C",
+      date: "5 Mar., Thu.",
+    },
+    {
+      icon: "../src/assets/weather_icons/13n.png",
+      temp: "10°C",
+      date: "6 Mar., Fri.",
+    },
+    {
+      icon: "../src/assets/weather_icons/11n.png",
+      temp: "6°C",
+      date: "7 Mar., Sat.",
+    },
+  ];
   return (
-    <section className="flex flex-col text-white items-center gap-3 w-full py-8">
+    <>
       <section className="flex flex-col gap-2">
         <div className="flex flex-col items-center gap-1">
           <h3 className="text-xl">Now</h3>
@@ -35,85 +112,121 @@ export default function ForecastStats() {
         </div>
       </section>
       <Divisor />
-      <section className="w-full">
-        <section className="flex flex-col bg-zinc-900 text-lg text-zinc-500 font-medium rounded-md px-4 py-2 gap-2">
-          <h3 className="text-xl">Today's Hightlights</h3>
-          <div className="bg-zinc-950 pt-3 px-3 pb-7 rounded-md text-md">
-            <h4>Sunrise & Sunset</h4>
-            <div className="flex items-center justify-between mt-3 px-3">
-              <div>
-                <div className="flex items-center gap-2">
-                  <IoIosSunny className="size-8 text-white" />
-                  <div className="flex flex-col text-xl leading-none">
-                    <h5 className="text-sm">Sunrise</h5>
-                    <p className="text-white font-bold">06:30 AM</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <FaMoon className="size-7 text-white" />
-                  <div className="flex flex-col text-xl leading-none">
-                    <h5 className="text-sm">Sunset</h5>
-                    <p className="text-white font-bold">07:23 PM</p>
-                  </div>
+      <section className="flex flex-col w-full bg-zinc-900 text-lg text-zinc-500 font-medium rounded-md px-4 py-2 gap-2">
+        <h3 className="text-xl">Today's Hightlights</h3>
+        <div className="bg-zinc-950 pt-3 px-3 pb-7 rounded-md text-md">
+          <h4>Sunrise & Sunset</h4>
+          <div className="flex items-center justify-between mt-3 px-3">
+            <div>
+              <div className="flex items-center gap-2">
+                <IoIosSunny className="size-8 text-white" />
+                <div className="flex flex-col text-xl leading-none">
+                  <h5 className="text-sm">Sunrise</h5>
+                  <p className="text-white font-bold">06:30 AM</p>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="bg-zinc-950 pt-3 px-3 pb-7 rounded-md text-md">
-            <div className="flex justify-between items-center">
-              <h3>Air Quality</h3>
-              <div className="bg-green-500 text-zinc-950 px-2 rounded-xl text-sm">
-                Good
-              </div>
-            </div>
-            <div className="flex mt-3 justify-between items-center px-3">
-              <FaWind className="size-10 text-white" />
-              {airQualityStats.map((stat) => {
-                return (
-                  <div className="flex flex-col items-center">
-                    <h5 className="text-sm">{stat.name}</h5>
-                    <p className="text-white text-2xl">{stat.value}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="bg-zinc-950 w-full pt-3 px-3 pb-7 rounded-md text-md">
-              <h3>Humidity</h3>
-              <div className="flex items-center text-white mt-3 justify-between px-1">
-                <IoMdWater className="size-10" />
-                <p className="text-3xl">
-                  82<span className="text-xl">%</span>
-                </p>
-              </div>
-            </div>
-            <div className="bg-zinc-950 w-full pt-3 px-3 pb-7 rounded-md text-md">
-              <h3>Pressure</h3>
-              <div className="flex items-center text-white mt-3 justify-between px-1">
-                <MdWaves className="size-10" />
-                <p className="text-2xl">30.12in</p>
-              </div>
-            </div>
-            <div className="bg-zinc-950 w-full pt-3 px-3 pb-7 rounded-md text-md">
-              <h3>Visibility</h3>
-              <div className="flex items-center text-white mt-3 justify-between px-1">
-                <IoEye className="size-10" />
-                <p className="text-3xl">20mi</p>
-              </div>
-            </div>
-            <div className="bg-zinc-950 w-full pt-3 px-3 pb-7 rounded-md text-md">
-              <h3>Feels Like</h3>
-              <div className="flex items-center text-white mt-3 justify-between px-1">
-                <LiaTemperatureLowSolid className="size-10" />
-                <p className="text-3xl">2°C</p>
+            <div>
+              <div className="flex items-center gap-2">
+                <FaMoon className="size-7 text-white" />
+                <div className="flex flex-col text-xl leading-none">
+                  <h5 className="text-sm">Sunset</h5>
+                  <p className="text-white font-bold">07:23 PM</p>
+                </div>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+        <div className="bg-zinc-950 pt-3 px-3 pb-7 rounded-md text-md">
+          <div className="flex justify-between items-center">
+            <h3>Air Quality</h3>
+            <div className="bg-green-500 text-zinc-950 px-2 rounded-xl text-sm">
+              Good
+            </div>
+          </div>
+          <div className="flex mt-3 justify-between items-center px-3">
+            <FaWind className="size-10 text-white" />
+            {airQualityStats.map((stat) => {
+              return (
+                <div className="flex flex-col items-center">
+                  <h5 className="text-sm">{stat.name}</h5>
+                  <p className="text-white text-2xl">{stat.value}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="bg-zinc-950 w-full pt-3 px-3 pb-7 rounded-md text-md">
+            <h3>Humidity</h3>
+            <div className="flex items-center text-white mt-3 justify-between px-1">
+              <IoMdWater className="size-10" />
+              <p className="text-3xl">
+                82<span className="text-xl">%</span>
+              </p>
+            </div>
+          </div>
+          <div className="bg-zinc-950 w-full pt-3 px-3 pb-7 rounded-md text-md">
+            <h3>Pressure</h3>
+            <div className="flex items-center text-white mt-3 justify-between px-1">
+              <MdWaves className="size-10" />
+              <p className="text-2xl">30.12in</p>
+            </div>
+          </div>
+          <div className="bg-zinc-950 w-full pt-3 px-3 pb-7 rounded-md text-md">
+            <h3>Visibility</h3>
+            <div className="flex items-center text-white mt-3 justify-between px-1">
+              <IoEye className="size-10" />
+              <p className="text-3xl">20mi</p>
+            </div>
+          </div>
+          <div className="bg-zinc-950 w-full pt-3 px-3 pb-7 rounded-md text-md">
+            <h3>Feels Like</h3>
+            <div className="flex items-center text-white mt-3 justify-between px-1">
+              <LiaTemperatureLowSolid className="size-10" />
+              <p className="text-3xl">2°C</p>
+            </div>
+          </div>
+        </div>
       </section>
-    </section>
+      <section className="flex flex-col w-full text-lg text-zinc-500 font-medium rounded-md px-4 py-2 gap-2">
+        <h3 className="text-xl">Today at</h3>
+        <ul className="grid grid-cols-3 text-white gap-4">
+          {todayAt.map((day) => {
+            return (
+              <li className="flex flex-col gap-2">
+                <div className="flex flex-col items-center justify-center py-2 bg-zinc-900 rounded-xl">
+                  <h4 className="text-xl">{day.time}</h4>
+                  <img className="size-12" src={day.icon} />
+                  <p className="text-md font-normal">{day.temp}</p>
+                </div>
+                <div className="flex flex-col items-center justify-center py-2 bg-zinc-900 rounded-xl">
+                  <img className="size-12" src={day.orientationIcon} />
+                  <p className="text-md font-normal">{day.wind}</p>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+      <section className="flex flex-col w-full text-lg text-zinc-500 font-medium rounded-md px-4 py-2 gap-2">
+        <h3 className="text-xl">Week Forecast</h3>
+        <Carousel opts={{ dragFree: true }} orientation="horizontal">
+          <CarouselContent className="w-full">
+            {weekForecast.map((day) => {
+              return (
+                <CarouselItem key={day.date} className="basis-1/2">
+                  <div className="flex flex-col text-white items-left justify-center px-3 py-3 bg-zinc-900 rounded-xl gap-1">
+                    <img className="size-10" src={day.icon} />
+                    <h4 className="text-3xl font-medium">{day.temp}</h4>
+                    <p className="text-md text-zinc-600">{day.date}</p>
+                  </div>
+                </CarouselItem>
+              );
+            })}
+          </CarouselContent>
+        </Carousel>
+      </section>
+    </>
   );
 }
