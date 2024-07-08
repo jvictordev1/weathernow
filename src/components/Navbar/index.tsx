@@ -11,7 +11,13 @@ import { IoMdSearch } from "react-icons/io";
 import { IoLocationSharp, IoMenu } from "react-icons/io5";
 import { MdDelete, MdGpsFixed } from "react-icons/md";
 import reducedlogo from "../../assets/reducedlogo.svg";
-import { Dialog, DialogClose, DialogContent, DialogFooter } from "../ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+} from "../ui/dialog";
 
 export default function Navbar() {
   const [isCurrentLocationActive, setIsCurrentLocationActive] = useState(false);
@@ -40,6 +46,7 @@ export default function Navbar() {
   return (
     <Dialog>
       <DialogContent className="h-1/2 bg-zinc-900 py-2 border-0 w-4/5 rounded-xl">
+        <DialogTitle className="hidden">Search city Dialog</DialogTitle>
         <section className="flex items-center border-b-2 border-zinc-800">
           <input
             type="text"
@@ -57,26 +64,29 @@ export default function Navbar() {
                   className="flex items-center justify-between"
                   key={city.city}
                 >
-                  <div className="flex items-center gap-3">
+                  <button
+                    // onClick={() => changePage(!currentPageValue)}
+                    className="flex items-center gap-2"
+                  >
                     <IoLocationSharp className="size-6 text-zinc-500" />
-                    <div className="flex flex-col">
+                    <div className="flex items-start flex-col">
                       <h3>{city.city}</h3>
                       <p className="text-zinc-500 text-sm">
                         {city.state}, {city.country}
                       </p>
                     </div>
-                  </div>
-                  <MdDelete className="size-5 text-red-400" />
+                  </button>
+                  <button type="button" title="Click to delete">
+                    <MdDelete className="size-5 text-red-400" />
+                  </button>
                 </li>
               );
             })}
           </ul>
         </section>
         <DialogFooter>
-          <DialogClose className="w-full">
-            <button className="w-full text-white bg-red-500 font-bold rounded-xl px-4 py-2">
-              Close
-            </button>
+          <DialogClose className="w-full bg-red-500 rounded-lg py-2 text-white text-md font-medium">
+            Close
           </DialogClose>
         </DialogFooter>
       </DialogContent>

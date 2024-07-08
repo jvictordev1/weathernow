@@ -96,7 +96,7 @@ export default function ForecastStats() {
     },
   ];
   return (
-    <>
+    <section className="visible w-full flex flex-col items-center gap-4">
       <section className="flex flex-col gap-2">
         <div className="flex flex-col items-center gap-1">
           <h3 className="text-xl">Now</h3>
@@ -150,7 +150,7 @@ export default function ForecastStats() {
             <FaWind className="size-10 text-white" />
             {airQualityStats.map((stat) => {
               return (
-                <div className="flex flex-col items-center">
+                <div key={stat.name} className="flex flex-col items-center">
                   <h5 className="text-sm">{stat.name}</h5>
                   <p className="text-white text-2xl">{stat.value}</p>
                 </div>
@@ -235,6 +235,6 @@ export default function ForecastStats() {
         </Carousel>
       </section>
       <Footer />
-    </>
+    </section>
   );
 }
