@@ -10,6 +10,7 @@ import { FaGithub, FaSun } from "react-icons/fa";
 import { IoMdSearch } from "react-icons/io";
 import { IoLocationSharp, IoMenu } from "react-icons/io5";
 import { MdGpsFixed } from "react-icons/md";
+import { Link } from "react-router-dom";
 import geoInstance from "../../api/geocoding_api";
 import reducedlogo from "../../assets/reducedlogo.svg";
 import { CityInterface } from "../../common/types";
@@ -27,6 +28,7 @@ export default function Navbar() {
   const [searchedCity, setSearchedCity] = useState("");
   const [loaderVisibility, setLoaderVisibility] = useState(false);
   const [cities, setCities] = useState<CityInterface[]>([]);
+  const [modalState, setModalState] = useState(false);
   useEffect(() => {
     if (searchedCity) {
       setLoaderVisibility(true);
@@ -54,7 +56,7 @@ export default function Navbar() {
     setLoaderVisibility(false);
   }, [searchedCity]);
   return (
-    <Dialog>
+    <Dialog open={modalState} onOpenChange={setModalState}>
       <DialogContent className="flex flex-col justify-between h-1/2 bg-zinc-900 py-2 border-0 w-4/5 rounded-xl">
         <DialogTitle className="hidden">Search city Dialog</DialogTitle>
         <section className="flex h-14 items-center border-b-2 border-zinc-800">
@@ -77,8 +79,10 @@ export default function Navbar() {
                   className="flex items-center justify-between"
                   key={city.lat + city.lon}
                 >
-                  <button
-                    // onClick={() => changePage(!currentPageValue)}
+                  <Link
+                    to="forecast"
+                    state={city}
+                    onClick={() => setModalState(!modalState)}
                     className="flex items-center gap-2"
                   >
                     <IoLocationSharp className="size-6 text-zinc-500" />
@@ -89,7 +93,7 @@ export default function Navbar() {
                         {city.country}
                       </p>
                     </div>
-                  </button>
+                  </Link>
                 </li>
               );
             })}
@@ -103,7 +107,10 @@ export default function Navbar() {
       </DialogContent>
       <nav className="flex items-center text-white font-medium w-full justify-between py-5 px-6 border-b-2 border-zinc-900">
         {/* <img className="w-24" src={logo} alt="weathernow logo" /> */}
-        <img className="w-6" src={reducedlogo} alt="weathernow logo" />
+        <Link to="/">
+          <img className="w-6" src={reducedlogo} alt="weathernow logo" />
+        </Link>
+
         <ul className="flex items-center gap-3">
           <li>
             <DialogTrigger title="Search city" className="flex">

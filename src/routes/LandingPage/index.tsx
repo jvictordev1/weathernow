@@ -1,6 +1,13 @@
-export default function Landing() {
+import { motion } from "framer-motion";
+
+export default function LandingPage() {
   return (
-    <section className="flex text-white flex-col mt-20 items-center max-w-2xl text-center gap-4">
+    <motion.section
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+      className="flex text-white flex-col mt-20 items-center text-center gap-4"
+    >
       <h1 className="text-5xl">
         Your newest <span className="text-amber-200">weather</span> friend.
       </h1>
@@ -10,6 +17,6 @@ export default function Landing() {
       <button className="text-md rounded-full py-3 px-6 bg-zinc-800">
         Get started
       </button>
-    </section>
+    </motion.section>
   );
 }
