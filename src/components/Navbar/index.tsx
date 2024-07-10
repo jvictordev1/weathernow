@@ -5,12 +5,15 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown";
 import { DialogTrigger } from "@radix-ui/react-dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaGithub, FaSun } from "react-icons/fa";
 import { IoMdSearch } from "react-icons/io";
 import { IoLocationSharp, IoMenu } from "react-icons/io5";
-import { MdDelete, MdGpsFixed } from "react-icons/md";
+import { MdGpsFixed } from "react-icons/md";
+import geoInstance from "../../api/geocoding_api";
 import reducedlogo from "../../assets/reducedlogo.svg";
+import { CityInterface } from "../../common/types";
+import Loader from "../Loader";
 import {
   Dialog,
   DialogClose,
@@ -21,48 +24,58 @@ import {
 
 export default function Navbar() {
   const [isCurrentLocationActive, setIsCurrentLocationActive] = useState(false);
-  const cities = [
-    {
-      city: "Lagos",
-      state: "Lagos",
-      country: "Nigeria",
-    },
-    {
-      city: "Abuja",
-      state: "Abuja",
-      country: "Nigeria",
-    },
-    {
-      city: "New York",
-      state: "New York",
-      country: "USA",
-    },
-    {
-      city: "London",
-      state: "London",
-      country: "UK",
-    },
-  ];
+  const [searchedCity, setSearchedCity] = useState("");
+  const [loaderVisibility, setLoaderVisibility] = useState(false);
+  const [cities, setCities] = useState<CityInterface[]>([]);
+  useEffect(() => {
+    if (searchedCity) {
+      setLoaderVisibility(true);
+      const data = setTimeout(() => {
+        geoInstance
+          .get(
+            `direct?q=${searchedCity}&limit=10&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`
+          )
+          .then((res) => {
+            setCities(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => {
+            setLoaderVisibility(false);
+          });
+      }, 500);
+      return () => {
+        clearTimeout(data);
+        setLoaderVisibility(false);
+      };
+    }
+    setCities([]);
+    setLoaderVisibility(false);
+  }, [searchedCity]);
   return (
     <Dialog>
-      <DialogContent className="h-1/2 bg-zinc-900 py-2 border-0 w-4/5 rounded-xl">
+      <DialogContent className="flex flex-col justify-between h-1/2 bg-zinc-900 py-2 border-0 w-4/5 rounded-xl">
         <DialogTitle className="hidden">Search city Dialog</DialogTitle>
-        <section className="flex items-center border-b-2 border-zinc-800">
+        <section className="flex h-14 items-center border-b-2 border-zinc-800">
           <input
             type="text"
             name="city"
             id="city"
             placeholder="Search city..."
             className="w-full text-white bg-transparent font-medium text-xl border-zinc-800 placeholder:text-zinc-700 focus:border-white rounded-xl px-2 outline-none"
+            onChange={(e) => setSearchedCity(e.target.value)}
+            value={searchedCity}
           />
+          <Loader visibility={loaderVisibility} />
         </section>
-        <section className="h-full">
-          <ul className="flex flex-col text-white font-medium text-md gap-4">
+        <section className="flex flex-col items-center">
+          <ul className="flex w-full flex-col text-white font-medium h-56 text-md overflow-scroll gap-4">
             {cities.map((city) => {
               return (
                 <li
                   className="flex items-center justify-between"
-                  key={city.city}
+                  key={city.lat + city.lon}
                 >
                   <button
                     // onClick={() => changePage(!currentPageValue)}
@@ -70,14 +83,12 @@ export default function Navbar() {
                   >
                     <IoLocationSharp className="size-6 text-zinc-500" />
                     <div className="flex items-start flex-col">
-                      <h3>{city.city}</h3>
+                      <h3>{city.name}</h3>
                       <p className="text-zinc-500 text-sm">
-                        {city.state}, {city.country}
+                        {city.state ? `${city.state}, ` : null}
+                        {city.country}
                       </p>
                     </div>
-                  </button>
-                  <button type="button" title="Click to delete">
-                    <MdDelete className="size-5 text-red-400" />
                   </button>
                 </li>
               );
