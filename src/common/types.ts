@@ -13,6 +13,8 @@ export interface CurrentWeatherInterface {
   sunrise: string;
   sunset: string;
   visibility: number;
+  weather_icon: string;
+  weather_description: string;
 }
 
 export interface CurrentAirQualityInterface {
@@ -20,9 +22,19 @@ export interface CurrentAirQualityInterface {
   unit: string;
   value: number;
 }
-export interface AirQualityAcronymsInterface {
-  pm2_5: string;
-  nitrogen_dioxide: string;
-  sulphur_dioxide: string;
-  ozone: string;
+
+export interface HourlyForecastStatsInterface {
+  hour: string;
+  temp: number;
+  wind_icon: string;
+  wind_speed: number;
+  wind_direction: number;
+  weather_icon: string;
+  weather_description: string;
+}
+
+export interface WeekForecastStatsInterface {
+  weather_icon: string;
+  temp: number;
+  date: string;
 }

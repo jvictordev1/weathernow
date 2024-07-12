@@ -34,9 +34,13 @@ export default function Navbar() {
       setLoaderVisibility(true);
       const data = setTimeout(() => {
         geoInstance
-          .get(
-            `direct?q=${searchedCity}&limit=10&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`
-          )
+          .get("direct", {
+            params: {
+              q: searchedCity,
+              limit: 10,
+              appid: process.env.REACT_APP_OPENWEATHER_API_KEY,
+            },
+          })
           .then((res) => {
             setCities(
               res.data.filter(
