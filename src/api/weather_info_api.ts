@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const weatherInfo = axios.create({
-  baseURL: "https://api.openweathermap.org/data/2.5/",
+  baseURL: "https://api.open-meteo.com/v1/forecast",
 });
 
 export default weatherInfo;

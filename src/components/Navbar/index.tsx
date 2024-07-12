@@ -38,7 +38,16 @@ export default function Navbar() {
             `direct?q=${searchedCity}&limit=10&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`
           )
           .then((res) => {
-            setCities(res.data);
+            setCities(
+              res.data.filter(
+                (city: CityInterface, index: number, self: CityInterface[]) =>
+                  index ===
+                  self.findIndex(
+                    (t: CityInterface) =>
+                      t.name === city.name && t.state === city.state
+                  )
+              )
+            );
           })
           .catch((err) => {
             console.log(err);
@@ -108,7 +117,12 @@ export default function Navbar() {
       <nav className="flex items-center text-white font-medium w-full justify-between py-5 px-6 border-b-2 border-zinc-900">
         {/* <img className="w-24" src={logo} alt="weathernow logo" /> */}
         <Link to="/">
-          <img className="w-6" src={reducedlogo} alt="weathernow logo" />
+          <img
+            className="w-6"
+            title="Return to home page"
+            src={reducedlogo}
+            alt="weathernow logo"
+          />
         </Link>
 
         <ul className="flex items-center gap-3">

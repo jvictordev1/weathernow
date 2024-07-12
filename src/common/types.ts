@@ -5,12 +5,24 @@ export interface CityInterface {
   lon: number;
   state?: string;
 }
-export interface TodayHighlightsInterface {
+export interface CurrentWeatherInterface {
   feels_like: number;
-  humidity: number;
-  pressure: number;
+  relative_humidity: number;
+  surf_pressure: number;
   temp: number;
+  sunrise: string;
+  sunset: string;
   visibility: number;
-  description: string;
-  icon: string;
+}
+
+export interface CurrentAirQualityInterface {
+  name: string;
+  unit: string;
+  value: number;
+}
+export interface AirQualityAcronymsInterface {
+  pm2_5: string;
+  nitrogen_dioxide: string;
+  sulphur_dioxide: string;
+  ozone: string;
 }

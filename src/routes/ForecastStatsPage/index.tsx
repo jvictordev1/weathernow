@@ -6,8 +6,15 @@ import { IoEye, IoLocationSharp } from "react-icons/io5";
 import { LiaTemperatureLowSolid } from "react-icons/lia";
 import { MdWaves } from "react-icons/md";
 import { useLocation } from "react-router-dom";
+import airQuality from "../../api/air_quality_api";
 import weatherInfo from "../../api/weather_info_api";
-import { TodayHighlightsInterface } from "../../common/types";
+import { airQualityAcronyms } from "../../common/air_quality_acronyms";
+import { days, months } from "../../common/calendar";
+import {
+  AirQualityAcronymsInterface,
+  CurrentAirQualityInterface,
+  CurrentWeatherInterface,
+} from "../../common/types";
 import Divisor from "../../components/Divisor";
 import Footer from "../../components/Footer";
 import Loader from "../../components/Loader";
@@ -19,15 +26,6 @@ import {
 } from "../../components/ui/carousel";
 
 export default function ForecastStats() {
-  const airQualityStats = [
-    { name: "PM25", value: 3.9 },
-    { name: "SO2", value: 7.75 },
-    {
-      name: "NO2",
-      value: 32.75,
-    },
-    { name: "O3", value: 38.6 },
-  ];
   const todayAt = [
     {
       time: "12 AM",
@@ -104,32 +102,67 @@ export default function ForecastStats() {
       date: "7 Mar., Sat.",
     },
   ];
-  const [localStats, setLocalStats] = useState<TodayHighlightsInterface>();
+  const [todayLocalStats, setTodayLocalStats] =
+    useState<CurrentWeatherInterface>();
+  const [todayAirQualityStats, setTodayAirQualityStats] =
+    useState<CurrentAirQualityInterface[]>();
   const [loaderVisibility, setLoaderVisibility] = useState(true);
   const location = useLocation();
+  const currDate = new Date();
+  const currTime = currDate.getHours();
+  const currDay = currDate.getDay();
+
   useEffect(() => {
     if (location) {
       setLoaderVisibility(true);
       weatherInfo
         .get(
-          `weather?lat=${location.state.lat}&lon=${location.state.lon}&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`
+          `?latitude=${location.state.lat}&longitude=${location.state.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,surface_pressure&daily=sunrise,sunset&hourly=visibility&timezone=auto&forecast_days=1`
         )
         .then((res) => {
-          console.log(res);
           const data = res.data;
-          setLocalStats({
-            feels_like: data.main.feels_like,
-            humidity: data.main.humidity,
-            pressure: data.main.pressure,
-            temp: data.main.temp,
-            visibility: data.visibility / 1000,
-            description: data.weather[0].description,
-            icon: `../src/assets/weather_icons/${data.weather[0].icon}.png`,
+          setTodayLocalStats({
+            feels_like: data.current.apparent_temperature.toFixed(0),
+            relative_humidity: data.current.relative_humidity_2m,
+            surf_pressure: data.current.surface_pressure.toFixed(0),
+            temp: data.current.temperature_2m.toFixed(0),
+            sunrise: data.daily.sunrise[0].split("T")[1],
+            sunset: data.daily.sunset[0].split("T")[1],
+            visibility: Number(
+              (data.hourly.visibility[currTime] / 1000).toFixed(0)
+            ),
           });
           setLoaderVisibility(false);
         });
+      airQuality
+        .get(
+          `?latitude=${location.state.lat}&longitude=${location.state.lon}&current=pm2_5,nitrogen_dioxide,sulphur_dioxide,ozone`
+        )
+        .then((res) => {
+          const arr = [];
+          console.log(res.data);
+          for (const key in res.data.current) {
+            if (key === "time" || key === "interval") {
+              continue;
+            }
+            for (const stat in airQualityAcronyms) {
+              if (key === stat) {
+                const obj = {
+                  name: airQualityAcronyms[
+                    stat as keyof AirQualityAcronymsInterface
+                  ],
+                  unit: res.data.current_units[key],
+                  value: res.data.current[key],
+                };
+                arr.push(obj);
+              }
+            }
+          }
+          setTodayAirQualityStats(arr);
+        });
     }
-  }, [location]);
+  }, [location, currTime]);
+
   return (
     <>
       <div className="mt-10">
@@ -146,25 +179,31 @@ export default function ForecastStats() {
           <div className="flex flex-col items-center gap-1">
             <h3 className="text-xl">Now</h3>
             <h1 className="text-7xl font-bold text-slate-300">
-              {localStats?.temp.toFixed(0)}°C
+              {todayLocalStats?.temp}°C
             </h1>
-            <img
-              src={localStats?.icon}
-              alt={localStats?.description}
+            {/* <img
+              src={todayLocalStats?.icon}
+              alt={todayLocalStats?.description}
               className="w-14"
-            />
-            <p className="text-sm text-zinc-600">{localStats?.description}</p>
+            /> */}
+            {/* <p className="text-sm text-zinc-600">
+              {todayLocalStats?.description}
+            </p> */}
           </div>
           <Divisor />
           <div className="flex flex-col items-center gap-1">
             <div className="flex items-center gap-1 text-sm text-zinc-600">
               <CiCalendar className="size-5" />
-              <p>Wednesday, 1 Mar.</p>
+              <p>
+                {days[currDay]}, {currDay} {months[currDate.getMonth()]}
+              </p>
             </div>
             <div className="flex items-center gap-1 text-sm text-zinc-600">
               <IoLocationSharp className="size-5" />
               <p>
-                {location?.state.name}, {location?.state.country}
+                {location.state.state
+                  ? `${location?.state.name}, ${location.state.state}, ${location?.state.country}`
+                  : `${location?.state.name}, ${location?.state.country}`}
               </p>
             </div>
           </div>
@@ -180,7 +219,9 @@ export default function ForecastStats() {
                   <IoIosSunny className="size-8 text-white" />
                   <div className="flex flex-col text-xl leading-none">
                     <h5 className="text-sm">Sunrise</h5>
-                    <p className="text-white font-bold">06:30 AM</p>
+                    <p className="text-white font-bold">
+                      {todayLocalStats?.sunrise} AM
+                    </p>
                   </div>
                 </div>
               </div>
@@ -189,7 +230,9 @@ export default function ForecastStats() {
                   <FaMoon className="size-7 text-white" />
                   <div className="flex flex-col text-xl leading-none">
                     <h5 className="text-sm">Sunset</h5>
-                    <p className="text-white font-bold">07:23 PM</p>
+                    <p className="text-white font-bold">
+                      {todayLocalStats?.sunset} PM
+                    </p>
                   </div>
                 </div>
               </div>
@@ -198,17 +241,18 @@ export default function ForecastStats() {
           <div className="bg-zinc-950 pt-3 px-3 pb-7 rounded-md text-md">
             <div className="flex justify-between items-center">
               <h3>Air Quality</h3>
-              <div className="bg-green-500 text-zinc-950 px-2 rounded-xl text-sm">
+              {/* <div className="bg-green-500 text-zinc-950 px-2 rounded-xl text-sm">
                 Good
-              </div>
+              </div> */}
             </div>
             <div className="flex mt-3 justify-between items-center px-3">
               <FaWind className="size-10 text-white" />
-              {airQualityStats.map((stat) => {
+              {todayAirQualityStats?.map((stat) => {
                 return (
                   <div key={stat.name} className="flex flex-col items-center">
                     <h5 className="text-sm">{stat.name}</h5>
                     <p className="text-white text-2xl">{stat.value}</p>
+                    <p className="text-xs">{stat.unit}</p>
                   </div>
                 );
               })}
@@ -220,7 +264,7 @@ export default function ForecastStats() {
               <div className="flex items-center text-white mt-3 justify-between px-1">
                 <IoMdWater className="size-10" />
                 <p className="text-3xl">
-                  {localStats?.humidity.toFixed(0)}
+                  {todayLocalStats?.relative_humidity}
                   <span className="text-xl">%</span>
                 </p>
               </div>
@@ -229,25 +273,21 @@ export default function ForecastStats() {
               <h3>Pressure</h3>
               <div className="flex items-center text-white mt-3 justify-between px-1">
                 <MdWaves className="size-10" />
-                <p className="text-2xl">{localStats?.pressure}hPa</p>
+                <p className="text-2xl">{todayLocalStats?.surf_pressure}hPa</p>
               </div>
             </div>
             <div className="bg-zinc-950 w-full pt-3 px-3 pb-7 rounded-md text-md">
               <h3>Visibility</h3>
               <div className="flex items-center text-white mt-3 justify-between px-1">
                 <IoEye className="size-10" />
-                <p className="text-3xl">
-                  {localStats?.visibility.toFixed(1)}km
-                </p>
+                <p className="text-3xl">{todayLocalStats?.visibility}km</p>
               </div>
             </div>
             <div className="bg-zinc-950 w-full pt-3 px-3 pb-7 rounded-md text-md">
               <h3>Feels Like</h3>
               <div className="flex items-center text-white mt-3 justify-between px-1">
                 <LiaTemperatureLowSolid className="size-10" />
-                <p className="text-3xl">
-                  {localStats?.feels_like.toFixed(0)}°C
-                </p>
+                <p className="text-3xl">{todayLocalStats?.feels_like}°C</p>
               </div>
             </div>
           </div>
