@@ -8,12 +8,14 @@ export default function AppRouter() {
     <main className="bg-radial-gradient text-white bg-no-repeat h-screen overflow-auto">
       <Router>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route element={<GuardComponent />}>
-            <Route path="forecast" element={<ForecastStatsPage />} />
-          </Route>
-        </Routes>
+        <section className="mx-1 sm:mx-6">
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route element={<GuardComponent />}>
+              <Route path="forecast" element={<ForecastStatsPage />} />
+            </Route>
+          </Routes>
+        </section>
       </Router>
     </main>
   );

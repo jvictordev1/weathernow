@@ -16,8 +16,10 @@ export default function TodayForecastInfoCard({
   infoAlt,
 }: TodayForecastInfoCardProps) {
   return (
-    <div className="flex flex-col items-center text-white justify-center py-2 bg-zinc-900 rounded-xl">
-      {infoHeader ? <h4 className="text-2xl font-bold">{infoHeader}</h4> : null}
+    <div className="flex flex-col items-center text-white justify-center py-2 bg-light-zinc rounded-xl">
+      {infoHeader ? (
+        <h4 className="text-2xl font-semibold">{infoHeader}</h4>
+      ) : null}
       <img
         className={
           rotation_deg

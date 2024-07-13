@@ -16,6 +16,7 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+
     extend: {
       keyframes: {
         "accordion-down": {
@@ -26,9 +27,10 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        fontFamily: {
-          inter: ["Inter", "sans-serif"],
-        },
+      },
+      colors: {
+        "hard-zinc": "#111111",
+        "light-zinc": "#171717",
       },
       backgroundImage: {
         "dark-search-icon": "url('./assets/icons/darksearchicon.svg')",
