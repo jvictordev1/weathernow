@@ -11,7 +11,7 @@ import { IoMdSearch } from "react-icons/io";
 import { IoLocationSharp, IoMenu } from "react-icons/io5";
 import { MdGpsFixed } from "react-icons/md";
 import { RiMoonClearFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import geoInstance from "../../api/geocoding_api";
 import logo from "../../assets/logo.svg";
 import reducedlogo from "../../assets/reducedlogo.svg";
@@ -31,6 +31,7 @@ export default function Navbar() {
   const [loaderVisibility, setLoaderVisibility] = useState(false);
   const [cities, setCities] = useState<CityInterface[]>([]);
   const [modalState, setModalState] = useState(false);
+  const nav = useNavigate();
 
   const filterDuplicates = (cities: CityInterface[]) => {
     return cities.filter(
@@ -40,6 +41,32 @@ export default function Navbar() {
           (t: CityInterface) => t.name === city.name && t.state === city.state
         )
     );
+  };
+  const getUserCurrentLocation = async () => {
+    if (navigator.geolocation) {
+      const pos: GeolocationPosition = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
+      geoInstance
+        .get("reverse", {
+          params: {
+            lon: pos.coords.longitude,
+            lat: pos.coords.latitude,
+            appid: process.env.REACT_APP_OPENWEATHER_API_KEY,
+            limit: 1,
+          },
+        })
+        .then((res) => {
+          setIsCurrentLocationActive(true);
+          nav("forecast", { state: res.data[0] });
+        });
+    }
+  };
+  const onCitySelected = () => {
+    setModalState(!modalState);
+    if (isCurrentLocationActive) {
+      setIsCurrentLocationActive(false);
+    }
   };
 
   useEffect(() => {
@@ -99,7 +126,7 @@ export default function Navbar() {
                   <Link
                     to="forecast"
                     state={city}
-                    onClick={() => setModalState(!modalState)}
+                    onClick={onCitySelected}
                     className="flex items-center w-full gap-2"
                   >
                     <IoLocationSharp className="size-6 text-zinc-500" />
@@ -123,7 +150,12 @@ export default function Navbar() {
         </DialogFooter>
       </DialogContent>
       <nav className="flex items-center text-white font-medium w-full justify-between py-5 px-4 border-b-2 border-zinc-900 sm:px-14 lg:px-24">
-        <Link to="/">
+        <Link
+          to="/"
+          onClick={() =>
+            isCurrentLocationActive ? setIsCurrentLocationActive(false) : null
+          }
+        >
           <img
             className="w-6 sm:hidden"
             title="Return to home page"
@@ -144,9 +176,7 @@ export default function Navbar() {
           </li>
           <li>
             <button
-              onClick={() =>
-                setIsCurrentLocationActive(!isCurrentLocationActive)
-              }
+              onClick={getUserCurrentLocation}
               className={
                 isCurrentLocationActive
                   ? "flex text-red-400"
