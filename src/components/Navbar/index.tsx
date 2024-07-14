@@ -25,7 +25,11 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 
-export default function Navbar() {
+interface NavbarInterface {
+  toastPromise: (promise: () => Promise<GeolocationPosition>) => void;
+}
+
+export default function Navbar({ toastPromise }: NavbarInterface) {
   const [isCurrentLocationActive, setIsCurrentLocationActive] = useState(false);
   const [searchedCity, setSearchedCity] = useState("");
   const [loaderVisibility, setLoaderVisibility] = useState(false);
@@ -43,10 +47,16 @@ export default function Navbar() {
     );
   };
   const getUserCurrentLocation = async () => {
-    if (navigator.geolocation) {
-      const pos: GeolocationPosition = await new Promise((resolve, reject) => {
+    if (isCurrentLocationActive) {
+      return;
+    }
+    const posPromise = () =>
+      new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
       });
+    toastPromise(posPromise);
+    const pos: GeolocationPosition = await posPromise();
+    if (navigator.geolocation) {
       geoInstance
         .get("reverse", {
           params: {
@@ -182,7 +192,11 @@ export default function Navbar() {
                   ? "flex text-red-400"
                   : "flex text-white"
               }
-              title="Use current location"
+              title={
+                isCurrentLocationActive
+                  ? "Using current location"
+                  : "Use current location"
+              }
             >
               <MdGpsFixed className="size-6 transition-colors delay-75" />
             </button>
