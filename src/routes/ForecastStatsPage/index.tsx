@@ -26,7 +26,7 @@ export default function ForecastStats() {
     todayAirQualityStats,
     todayLocalStats,
     loaderVisibility,
-    currDay,
+    currDayNum,
     currDate,
   } = useFetchWeatherInfo(location.state, "12h");
 
@@ -64,7 +64,8 @@ export default function ForecastStats() {
             <div className="flex items-center gap-3 text-sm text-zinc-600 sm:text-md">
               <CiCalendar className="size-5" />
               <p>
-                {days[currDay]}, {currDay} {months[currDate.getMonth()]}
+                {days[currDayNum]}, {currDate.getDate()}{" "}
+                {months[currDate.getMonth()]}
               </p>
             </div>
             <div className="flex items-center gap-3 text-sm text-zinc-600 sm:text-md">

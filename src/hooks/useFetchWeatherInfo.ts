@@ -18,7 +18,7 @@ import {
 
 const currDate = new Date();
 const currTime = currDate.getHours();
-const currDay = currDate.getDay();
+const currDayNum = currDate.getDay();
 const hourConversor = (date: Date, hourType: string, hasMinutes: boolean) => {
   // will make 12h shift or 24h shift conversion based on user preference
   let hours = date.getHours();
@@ -138,7 +138,7 @@ export const useFetchWeatherInfo = (loc: CityInterface, hourType: string) => {
             const obj: WeekForecastStatsInterface = {
               weather_icon: icon.image,
               temp: chopArray(data.hourly.temperature_2m, 24)[i][currTime],
-              date: `${days[(currDay + i) % 7]}, ${currDate.getDate() + i} ${
+              date: `${days[(currDayNum + i) % 7]}, ${currDate.getDate() + i} ${
                 months[currDate.getMonth()]
               }`,
             };
@@ -186,7 +186,7 @@ export const useFetchWeatherInfo = (loc: CityInterface, hourType: string) => {
     todayAirQualityStats,
     todayLocalStats,
     loaderVisibility,
-    currDay,
+    currDayNum,
     currDate,
   };
 };
