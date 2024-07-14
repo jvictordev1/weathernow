@@ -7,13 +7,14 @@ import ForecastStatsPage from "./ForecastStatsPage";
 import LandingPage from "./LandingPage";
 export default function AppRouter() {
   const [sonnerPromise, setSonnerPromise] =
-    useState<() => Promise<GeolocationPosition>>();
+    useState<Promise<GeolocationPosition>>();
   useEffect(() => {
     if (sonnerPromise) {
       toast.promise(sonnerPromise, {
         loading: "Searching...",
         success: "Found your location!",
-        error: "Error",
+        error:
+          "Error. Either you denied the request or your browser does not support geolocation.",
       });
     }
   }, [sonnerPromise]);
@@ -21,7 +22,7 @@ export default function AppRouter() {
     <main className="bg-radial-gradient text-white bg-no-repeat h-screen overflow-auto">
       <Router>
         <Navbar
-          toastPromise={(promise: () => Promise<GeolocationPosition>) =>
+          toastPromise={(promise: Promise<GeolocationPosition>) =>
             setSonnerPromise(promise)
           }
         />

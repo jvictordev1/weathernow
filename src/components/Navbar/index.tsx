@@ -26,7 +26,7 @@ import {
 } from "../ui/dialog";
 
 interface NavbarInterface {
-  toastPromise: (promise: () => Promise<GeolocationPosition>) => void;
+  toastPromise: (promise: Promise<GeolocationPosition>) => void;
 }
 
 export default function Navbar({ toastPromise }: NavbarInterface) {
@@ -50,27 +50,29 @@ export default function Navbar({ toastPromise }: NavbarInterface) {
     if (isCurrentLocationActive) {
       return;
     }
-    const posPromise = () =>
-      new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
-      });
+    const posPromise = new Promise<GeolocationPosition>((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
     toastPromise(posPromise);
-    const pos: GeolocationPosition = await posPromise();
-    if (navigator.geolocation) {
-      geoInstance
-        .get("reverse", {
-          params: {
-            lon: pos.coords.longitude,
-            lat: pos.coords.latitude,
-            appid: process.env.REACT_APP_OPENWEATHER_API_KEY,
-            limit: 1,
-          },
-        })
-        .then((res) => {
-          setIsCurrentLocationActive(true);
-          nav("forecast", { state: res.data[0] });
-        });
-    }
+    posPromise
+      .then((pos) => {
+        geoInstance
+          .get("reverse", {
+            params: {
+              lon: pos.coords.longitude,
+              lat: pos.coords.latitude,
+              appid: process.env.REACT_APP_OPENWEATHER_API_KEY,
+              limit: 1,
+            },
+          })
+          .then((res) => {
+            setIsCurrentLocationActive(true);
+            nav("forecast", { state: res.data[0] });
+          });
+      })
+      .catch(() => {
+        return;
+      });
   };
   const onCitySelected = () => {
     setModalState(!modalState);
