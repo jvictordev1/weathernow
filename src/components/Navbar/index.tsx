@@ -22,8 +22,8 @@ import {
   DialogFooter,
   DialogTitle,
 } from "../ui/dialog";
-import logo from "/src/assets/logo.svg";
-import reducedlogo from "/src/assets/reducedlogo.svg";
+import logo from "/assets/logo.svg";
+import reducedlogo from "/assets/reducedlogo.svg";
 
 interface NavbarInterface {
   toastPromise: (promise: Promise<GeolocationPosition>) => void;

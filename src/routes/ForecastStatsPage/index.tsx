@@ -202,7 +202,7 @@ export default function ForecastStats() {
                       infoIcon={day.wind_icon}
                       infoParagraph={`${day.wind_speed.toString()}km/h`}
                       rotation_deg={day.wind_direction}
-                      infoAlt={day.weather_description}
+                      infoAlt={`Wind direction: ${day.wind_direction}°`}
                     />
                   </CarouselItem>
                 );

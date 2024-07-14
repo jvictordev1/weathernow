@@ -121,7 +121,7 @@ export const useFetchWeatherInfo = (loc: CityInterface, hourType: string) => {
               temp: data.hourly.temperature_2m[hour].toFixed(0),
               wind_speed: data.hourly.wind_speed_10m[hour].toFixed(0),
               wind_direction: Number(data.hourly.wind_direction_10m[hour]),
-              wind_icon: "/src/assets/weather_icons/direction.png",
+              wind_icon: "/assets/weather_icons/direction.png",
               weather_icon: time.image,
               weather_description: time.description,
             };
