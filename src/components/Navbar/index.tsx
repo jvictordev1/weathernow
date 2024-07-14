@@ -13,8 +13,6 @@ import { MdGpsFixed } from "react-icons/md";
 import { RiMoonClearFill } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import geoInstance from "../../api/geocoding_api";
-import logo from "../../assets/logo.svg";
-import reducedlogo from "../../assets/reducedlogo.svg";
 import { CityInterface } from "../../common/types";
 import Loader from "../Loader";
 import {
@@ -24,6 +22,8 @@ import {
   DialogFooter,
   DialogTitle,
 } from "../ui/dialog";
+import logo from "/src/assets/logo.svg";
+import reducedlogo from "/src/assets/reducedlogo.svg";
 
 interface NavbarInterface {
   toastPromise: (promise: Promise<GeolocationPosition>) => void;
