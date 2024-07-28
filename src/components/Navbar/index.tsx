@@ -6,11 +6,10 @@ import {
 } from "@nextui-org/dropdown";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { useEffect, useState } from "react";
-import { FaGithub, FaSun } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 import { IoMdSearch } from "react-icons/io";
 import { IoLocationSharp, IoMenu } from "react-icons/io5";
 import { MdGpsFixed } from "react-icons/md";
-import { RiMoonClearFill } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import geoInstance from "../../api/geocoding_api";
 import { CityInterface } from "../../common/types";
@@ -226,20 +225,20 @@ export default function Navbar({ toastPromise }: NavbarInterface) {
                     Github
                   </a>
                 </DropdownItem>
-                <DropdownItem
+                {/* <DropdownItem
                   className="justify-start"
                   startContent={<FaSun className="size-4" />}
                   key="color-mode"
                 >
                   Light
-                </DropdownItem>
+                </DropdownItem> */}
               </DropdownMenu>
             </Dropdown>
           </li>
-          <li className="hidden md:flex">
+          {/* <li className="hidden md:flex">
             <RiMoonClearFill className="size-5" />
-            {/* <FaSun className="size-5" /> */}
-          </li>
+            <FaSun className="size-5" />
+          </li> */}
           <li className="hidden md:flex">
             <a
               className="cursor-pointer"

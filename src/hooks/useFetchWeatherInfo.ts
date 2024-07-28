@@ -15,25 +15,11 @@ import {
   HourlyForecastStatsInterface,
   WeekForecastStatsInterface,
 } from "../common/types";
+import { hourConversor } from "../utils/hourConversor";
 
 const currDate = new Date();
 const currTime = currDate.getHours();
 const currDayNum = currDate.getDay();
-const hourConversor = (date: Date, hourType: string, hasMinutes: boolean) => {
-  // will make 12h shift or 24h shift conversion based on user preference
-  let hours = date.getHours();
-  const min = date.getMinutes();
-  const minutes = min < 10 ? "0" + min : min;
-  // if user wants 12h shift, type will be 12h, if not, it will be 24h
-  if (hourType === "12h") {
-    const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    // hasMinutes param is used to return string with 2 digits (just hours)
-    return hasMinutes ? `${hours}:${minutes} ${ampm}` : `${hours} ${ampm}`;
-  }
-  return hasMinutes ? `${hours}:${minutes}` : `${hours}`;
-};
 const chopArray = (arr: [], chunkSize: number) => {
   const chunks = [];
   const copyArray = Array.from(arr);
@@ -65,12 +51,6 @@ export const useFetchWeatherInfo = (loc: CityInterface, hourType: string) => {
           params: {
             latitude: loc.lat,
             longitude: loc.lon,
-            current:
-              "temperature_2m,relative_humidity_2m,apparent_temperature,surface_pressure,weather_code,is_day",
-            daily: "sunrise,sunset",
-            hourly:
-              "visibility,temperature_2m,wind_speed_10m,wind_direction_10m,weather_code,is_day",
-            timezone: "auto",
           },
         })
         .then((res) => {
@@ -151,7 +131,6 @@ export const useFetchWeatherInfo = (loc: CityInterface, hourType: string) => {
           params: {
             latitude: loc.lat,
             longitude: loc.lon,
-            current: "pm2_5,nitrogen_dioxide,sulphur_dioxide,ozone",
           },
         })
         .then((res) => {
