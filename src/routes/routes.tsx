@@ -19,23 +19,25 @@ export default function AppRouter() {
     }
   }, [sonnerPromise]);
   return (
-    <main className="bg-radial-gradient text-white bg-no-repeat h-screen overflow-auto">
-      <Router>
-        <Navbar
-          toastPromise={(promise: Promise<GeolocationPosition>) =>
-            setSonnerPromise(promise)
-          }
-        />
-        <section className="mx-2 sm:mx-6">
-          <Toaster richColors theme="system" />
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route element={<GuardComponent />}>
-              <Route path="forecast" element={<ForecastStatsPage />} />
-            </Route>
-          </Routes>
-        </section>
-      </Router>
+    <main className="text-white h-screen bg-zinc-950 overflow-auto">
+      <section className="bg-test bg-cover bg-no-repeat h-screen">
+        <Router>
+          <Navbar
+            toastPromise={(promise: Promise<GeolocationPosition>) =>
+              setSonnerPromise(promise)
+            }
+          />
+          <section className="mx-2 sm:mx-6">
+            <Toaster richColors theme="system" />
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route element={<GuardComponent />}>
+                <Route path="forecast" element={<ForecastStatsPage />} />
+              </Route>
+            </Routes>
+          </section>
+        </Router>
+      </section>
     </main>
   );
 }

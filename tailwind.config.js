@@ -34,9 +34,10 @@ module.exports = {
       },
       backgroundImage: {
         "dark-search-icon": "url('./assets/icons/darksearchicon.svg')",
+        test: "url('./assets/background.png')",
         "light-search-icon": "url('./assets/icons/lightsearchicon.svg')",
         "radial-gradient":
-          "linear-gradient(157deg, rgba(20,20,22,1) 35%, rgba(9,9,11,1) 100%)",
+          "linear-gradient(59deg, rgba(46,42,31,1) 0%, rgba(23,25,29,1) 100%)",
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",

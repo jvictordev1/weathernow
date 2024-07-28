@@ -31,7 +31,7 @@ export default function ForecastStats() {
   } = useFetchWeatherInfo(location.state, "12h");
 
   return (
-    <section className="mt-6 font-medium">
+    <section className="mt-10 font-medium">
       <div>
         <Loader visibility={loaderVisibility} />
       </div>
@@ -39,7 +39,7 @@ export default function ForecastStats() {
         className={
           loaderVisibility
             ? "hidden"
-            : "w-full flex flex-col items-center gap-4 px-3"
+            : "w-full flex flex-col items-center gap-4 px-3 lg:px-16"
         }
       >
         <section className="flex flex-col items-center gap-2">
