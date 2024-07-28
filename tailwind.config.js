@@ -33,9 +33,7 @@ module.exports = {
         "light-zinc": "#171717",
       },
       backgroundImage: {
-        "dark-search-icon": "url('./assets/icons/darksearchicon.svg')",
-        test: "url('./assets/background.png')",
-        "light-search-icon": "url('./assets/icons/lightsearchicon.svg')",
+        background: "url('/assets/background.png')",
         "radial-gradient":
           "linear-gradient(59deg, rgba(46,42,31,1) 0%, rgba(23,25,29,1) 100%)",
       },

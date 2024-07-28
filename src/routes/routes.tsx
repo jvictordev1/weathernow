@@ -20,7 +20,7 @@ export default function AppRouter() {
   }, [sonnerPromise]);
   return (
     <main className="text-white h-screen bg-zinc-950 overflow-auto">
-      <section className="bg-test bg-cover bg-no-repeat h-screen">
+      <section className="bg-background bg-cover bg-no-repeat h-screen">
         <Router>
           <Navbar
             toastPromise={(promise: Promise<GeolocationPosition>) =>
